@@ -1,0 +1,11 @@
+version: '3.1'
+
+services:
+  camino-columbus:
+    image: c4tplatform/camino-node:v0.4.1-rc2
+    ports:
+      - 9650:9650
+      - 9651:9651
+    volumes:
+      - ./camino-data:/root/.caminogo
+    command: [ "./camino-node", "--network-id=columbus" , "--http-host=0.0.0.0" ]
