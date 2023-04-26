@@ -58,7 +58,7 @@ There are two ways of creating a composable NFT:
 | ERC998/ERC721 Bottom-Up       | ERC-721 tokens that can attach themselves to other ERC721 tokens. Bottom-Up composable tokens record information about the parent tokens. They can be attached as child tokens to other ERC-721 tokens, allowing you to transfer the entire composition to someone else.                          |
 | ERC998/ERC20 Bottom-Up        | ERC-20 tokens that can attach themselves to ERC721 tokens. Bottom-Up composable tokens record information about the parent tokens. They can be attached as child tokens to other ERC-721 tokens, allowing you to transfer the entire composition to someone else.                              |
 
-### Marketplace 
+### Marketplace
 An implementation that allows users to buy, sell, list and take part in the auction, trade tokens based on these standards. It also serves as a substrate displaying how you can interact with different ERC standards, as well as underlies the differences in how they are treated on the contract level.
 
 ### NFTFactory + VRF Coordinator
@@ -121,46 +121,45 @@ npx hardhat compile
 npx hardhat run scripts/deploy.ts --network localhost
 ```
 
-5. ## User Guide
+## User Guide
 
-In this section, you'll find step-by-step guides for interacting with the different token standards and the marketplace.
+Let's walk through some examples of how to interact with the contracts. We'll start by minting each type of token, then we'll buy and sell tokens on the marketplace.
 
-### ERC721
 
-_TODO: Add instructions on how to interact with the ERC721 implementation, including minting tokens, transferring tokens, and managing token ownership._
+1. **Minting tokens:** 
+- - To mint ERC721 tokens, call the `mint` function with the recipient's address, token ID. Only the contract owner can mint tokens.
 
-### ERC1155
+```typescript
+// Example: Mint a token with ID 1 for the recipient
+await nft721.mint(recipient, 1);
+```
 
-The `NFT1155` contract implements the ERC1155 standard. To interact with this contract, follow these steps:
+- To mint ERC1155 tokens, call the `mint` function with the recipient's address, token ID, amount, and any additional data. Only the contract owner can mint tokens.
 
-1. **Minting tokens:** To mint ERC1155 tokens, call the `mint` function with the recipient's address, token ID, amount, and any additional data. Only the contract owner can mint tokens.
-
-```javascript
+```typescript
 // Example: Mint 10 tokens with ID 1 for the recipient
 await nft1155.mint(recipient, 1, 10, "0x");
 ```
+- ERC1155 introduces batching, which allows calling the `mintBatch` function with the recipient's address, an array of token IDs, an array of amounts, and any additional data.
 
-2. **Minting multiple tokens:** To mint multiple tokens at once, call the `mintBatch` function with the recipient's address, an array of token IDs, an array of amounts, and any additional data.
-
-```javascript
+```typescript
 // Example: Mint 10 tokens with ID 1 and 5 tokens with ID 2 for the recipient
 await nft1155.mintBatch(recipient, [1, 2], [10, 5], "0x");
 ```
 
+-
+
+
+
+2. **Minting multiple tokens:** 
+
 3. **Token URI:** To get the URI of a token, call the `uri` function with the token ID.
 
-```javascript
+```typescript
 // Example: Get the URI for token ID 1
 const tokenURI = await nft1155.uri(1);
 ```
 
-### ERC988
-
-_TODO: Add instructions on how to interact with the ERC988 implementation, including minting tokens, transferring tokens, managing token ownership, and composing tokens._
-
-### Marketplace
-
-_TODO: Add instructions on how to use the marketplace, including listing tokens for sale, purchasing tokens, and managing inventory._
 
 ## Contributing
 
