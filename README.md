@@ -1,4 +1,4 @@
-<img src="https://github.com/juuroudojo/images/blob/main/camino-logo.png" height="80" />
+<img src="https://github.com/juuroudojo/images/blob/main/camino-logo.png" height="180" />
 
 <br/>
 
