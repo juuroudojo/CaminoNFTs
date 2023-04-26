@@ -54,9 +54,6 @@ contract ComposableNFT is ERC721 {
     }
 
     function onERC20Received(address, uint256, bytes calldata) external pure returns(bytes4) {
-        // Not implemented for this example
         revert("ERC20 not supported");
     }
-
-    // Add other ERC998 required methods and events
 }

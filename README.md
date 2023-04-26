@@ -27,16 +27,16 @@ This repository showcases a sample set of NFT projects and an ecosystem employin
 
 Repo contains implementations of the following projects:
 
-### ERC721
+### [ERC721](https://eips.ethereum.org/EIPS/eip-721)
 A standard for non-fungible tokens (NFTs), allowing for unique, indivisible tokens. The first widely-used ERC standard, which introduced a set of rules for NFT interactions. It is a better fit for scenarios where individual ownership and unique token metadata are critical, and are prioritised over scalability and optimisation
 
-### ERC1155
+### [ERC1155](https://eips.ethereum.org/EIPS/eip-1155)
 A standard that combines the benefits of ERC20 and ERC721, allowing for both fungible and non-fungible tokens within a single contract. Besides creating the common base for fungible and nonfungible tokens interactions the standard also introduces solutions tackling gas/storage optimisation.
 The approach in general is a much more flexible one, and is a common choice for both: simple implementations, that are not dependant on strict approach to managing/tracking assets, which 721 enforces, and a more complicated infrastructure requiring additional interoperability and scalability features.
 
-### ERC988
+### [ERC988](https://eips.ethereum.org/EIPS/eip-998)
 A standard for composable tokens, enabling tokens to own other tokens and create complex hierarchies. It takes chooses a different approach and takes a step forward tackling the coexistence of fungible and nonfungible.
-The core of its structure is a family-tree. This standard is a bit more flexible and is useful when a case involves linking assets. Assets can record info about each other, be set to be transferred together automatically.
+The core of its structure is a family-tree. Assets can record info about each other, be set to be transferred together automatically. This standard is more advanced compared to the previous ones and is highly scalable. The combinations allow for a creation of a really versatile infrastructure. 
 
 There are two ways of creating a composable NFT:
 
@@ -127,24 +127,24 @@ The `NFT1155` contract implements the ERC1155 standard. To interact with this co
 
 1. **Minting tokens:** To mint ERC1155 tokens, call the `mint` function with the recipient's address, token ID, amount, and any additional data. Only the contract owner can mint tokens.
 
-\```javascript
+```javascript
 // Example: Mint 10 tokens with ID 1 for the recipient
 await nft1155.mint(recipient, 1, 10, "0x");
-\```
+```
 
 2. **Minting multiple tokens:** To mint multiple tokens at once, call the `mintBatch` function with the recipient's address, an array of token IDs, an array of amounts, and any additional data.
 
-\```javascript
+```javascript
 // Example: Mint 10 tokens with ID 1 and 5 tokens with ID 2 for the recipient
 await nft1155.mintBatch(recipient, [1, 2], [10, 5], "0x");
-\```
+```
 
 3. **Token URI:** To get the URI of a token, call the `uri` function with the token ID.
 
-\```javascript
+```javascript
 // Example: Get the URI for token ID 1
 const tokenURI = await nft1155.uri(1);
-\```
+```
 
 ### ERC988
 
