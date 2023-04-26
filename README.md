@@ -1,4 +1,8 @@
-<img src="https://github.com/juuroudojo/images/blob/main/camino-logo.png" height="50" /> # Camino NFTs
+<p>
+  <img src="https://github.com/juuroudojo/images/blob/main/camino-logo.png" height="50" style="vertical-align: middle;" />
+  <span style="font-size: 32px; font-weight: bold; margin-left: 10px;">Camino NFTs</span>
+</p>
+
 
 This repository showcases a sample set of NFT projects and an ecosystem employing it exploring different ERC standards and ways of working with them. Below you'll find a comprehensive description of what you can do with it, how each of the standard is different, as well as a guide walking you through the whole process of deploying the project and trying it out yourself.
 
