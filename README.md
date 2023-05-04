@@ -147,7 +147,9 @@ await nft1155.mint(recipient, 1, 10, "0x");
 await nft1155.mintBatch(recipient, [1, 2], [10, 5], "0x");
 ```
 
--
+- To mint ERC998 tokens, call the `mint` function with the recipient's address, token ID, and any additional data. Only the contract owner can mint tokens.
+
+```typescript
 
 
 
