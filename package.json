@@ -1,5 +1,5 @@
 {
-  "name": "hardhat-project",
+  "name": "nft-templates",
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.2.1",
     "@nomiclabs/hardhat-etherscan": "^3.1.0",
@@ -39,6 +39,9 @@
     "typescript": "^4.5.4"
   },
   "dependencies": {
-    "@chainlink/contracts": "^0.6.1"
+    "@chainlink/contracts": "^0.6.1",
+    "@ethersproject/hash": "^5.7.0",
+    "eth-sig-util": "^3.0.1",
+    "ethereumjs-util": "^7.1.5"
   }
 }

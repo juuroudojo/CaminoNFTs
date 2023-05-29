@@ -11,7 +11,7 @@ dotenv.config();
 
 
 const config: HardhatUserConfig = {
-  solidity: "0.8.9",
+  solidity: "0.8.20",
   networks: {
     columbus: {
       url: process.env.COLUMBUS_URL || "",
