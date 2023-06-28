@@ -59,24 +59,21 @@ class SignWallet {
 
   async getSignature(nftVoucher: NFTVoucher): Promise<string> {
     const domain = await this.getDomain();
+
+    // Create the EIP712 typed data
     const typedData = {
-      types: this.types,
-      domain: domain,
-      primaryType: 'NFTVoucher',
-      message: nftVoucher,
+        types: this.types,
+        domain: domain,
+        primaryType: 'NFTVoucher',
+        message: nftVoucher,
     };
 
-    // Extract the private key from the signer
-    // WARNING: This is unsafe and not recommended in a production environment
-    const privateKey = toBuffer(this.signer.privateKey);
-    const address = privateToAddress(privateKey);
-
-    const signature = sigUtil.signTypedData_v4(privateKey, {
-      data: typedData,
-    });
+    // Sign the typed data
+    const signature = await (this.signer as any)._signTypedData(domain, typedData.types, typedData.message);
 
     return signature;
-  }
+}
+
 }
 
 export default SignWallet;

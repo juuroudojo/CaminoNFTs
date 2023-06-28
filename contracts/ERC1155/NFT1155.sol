@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.20;
+pragma solidity 0.8.19;
 
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
 contract NFT1155 is ERC1155, AccessControl {
-    string public name = "PowerPuff";
-    string public symbol = "PFF";
+    string public name = "Pirates";
+    string public symbol = "PRT";
     bytes32 public constant OWNER = keccak256(abi.encodePacked("OWNER"));
 
     constructor()

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+pragma solidity 0.8.19;
 
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
@@ -100,23 +100,23 @@ contract LazyMintNFT is ILazyMint, IRoyalty, ERC1155Supply, EIP712 {
 
     /**
     * @dev Mints an NFT to the minter address, called internally by redeem function
-    * @param id tokenId of the NFT to mint
-    * @param amount amount of NFTs to mint
-    * @param to_ address to which NFT should be minted
-    * @param tokenURI URI of the token
+    * @param _id tokenId of the NFT to mint
+    * @param _amount amount of NFTs to mint
+    * @param _to address to which NFT should be minted
+    * @param _tokenURI URI of the token
     */
     function mint(
-        uint256 id_,
-        uint256 amount_,
-        address to_,
-        string memory tokenURI
+        uint256 _id,
+        uint256 _amount,
+        address _to,
+        string memory _tokenURI
     ) internal {
-        _beforeTokenMint(id_, amount_, to_);
+        _beforeTokenMint(_id, _amount, _to);
         // creator[id_] = to_;
-        _setURI(id_, tokenURI);
+        _setURI(_id, _tokenURI);
+        _mint(_to, _id, _amount, "");
 
-        emit Mint(to_, id_, amount_);
-        _mint(to_, id_, amount_, "");
+        emit Mint(_to, _id, _amount);
     }
 
     /** 

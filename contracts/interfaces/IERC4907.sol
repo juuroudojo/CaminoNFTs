@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.20;
+pragma solidity 0.8.19;
 
 interface IERC4907 {
     event UpdateUser(uint indexed tokenId, address indexed user, uint64 expires);

@@ -11,14 +11,30 @@ dotenv.config();
 
 
 const config: HardhatUserConfig = {
-  solidity: "0.8.20",
-  networks: {
+
+  
+  solidity: {
+		compilers: [
+			{
+				version: '0.8.19',
+				settings: {
+					optimizer: {
+						enabled: true,
+						runs: 200,
+					},
+				},
+			},
+			{
+				version: '0.4.17',
+			},
+		]},
+    networks: {
     columbus: {
       url: process.env.COLUMBUS_URL || "",
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },
   },
-};
+  };
 
 export default config;

@@ -6,6 +6,7 @@
 
 # Camino NFTs
 
+## [DEPLOYMENT GUIDE](https://github.com/juuroudojo/CaminoNFTs/blob/master/DEPLOYMENT.md)
 
 This repository showcases a sample set of NFT projects and an ecosystem employing it exploring different ERC standards and ways of working with them. Below you'll find a comprehensive description of what you can do with it, how each of the standard is different, as well as a guide walking you through the whole process of deploying the project and trying it out yourself.
 

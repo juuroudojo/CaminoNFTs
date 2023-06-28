@@ -3,7 +3,7 @@ import { expect } from "chai";
 import { parseEther, parseUnits } from "ethers/lib/utils";
 import { ethers, network, upgrades } from "hardhat";
 import { BigNumber, BigNumberish} from "ethers";
-import { SignWallet } from '../scripts/signature'
+import SignWallet from '../scripts/signature'
 import hre from 'hardhat'
 import { Marketplace, LazyMintNFT, TestToken } from "../typechain";
 
@@ -51,10 +51,22 @@ describe("Marketplace", function () {
   let token: TestToken;
 
   beforeEach(async function () {
+	await network.provider.request({
+        method: "hardhat_reset",
+        params: [{
+          forking: {
+            enabled: true,
+            jsonRpcUrl: process.env.POLYGON_FORKING_URL as string,
+            //you can fork from last block by commenting next line
+            blockNumber: 42655252,
+          },
+        },],
+    });
+
     [Ichigo, Rukiya, Kenpachi] = await ethers.getSigners();
 
     let Token = await ethers.getContractFactory("TestToken");
-    token = await Token.deploy(ethers.utils.parseEther("10000"));
+    token = await Token.deploy(ethers.utils.parseEther("109"));
 
     let Marketplace = await ethers.getContractFactory("Marketplace");
     marketplace = await Marketplace.deploy(Ichigo.address, 500, 500, token.address);
@@ -69,28 +81,28 @@ describe("Marketplace", function () {
 			const NFTVoucher = {
 				tokenId: counter(),
 				nftAmount: 1,
-				price: ethers.utils.parseEther('5'),
+				price: 55,
 				startDate: (await now()) + 43200,
 				endDate: (await now()) + 172800, 
 				maker: Ichigo.address,
 				nftAddress: nft.address,
-				tokenURI: '42',
+				tokenURI: 'dimsum',
 			}
-			const signWallet = new SignWallet(nft.address, signer)
+			const signWallet = new SignWallet(nft.address, Ichigo)
 			const signature = await signWallet.getSignature(NFTVoucher)
 
 			expect(await nft.check(NFTVoucher, signature)).to.equal(
-				signer.address
+				Ichigo.address
 			)
 		})
 		it('should list nft', async () => {
 			const NFTVoucher = {
 				tokenId: counter(),
 				nftAmount: 10,
-				price: ethers.utils.parseEther('4'),
+				price: 55,
 				startDate: (await now()) + 43200,
 				endDate: (await now()) + 172800,
-				maker: signer.address,
+				maker: Ichigo.address,
 				nftAddress: nft.address,
 				tokenURI: 'asapferg',
 			}
@@ -105,34 +117,34 @@ describe("Marketplace", function () {
 				console.log(e)
 			}
 
-			const signWallet = new SignWallet(nft.address, signer)
+			const signWallet = new SignWallet(nft.address, Ichigo)
 			const signature = await signWallet.getSignature(NFTVoucher)
 
 			await marketplace.listItem(
-        '1155',
-				'20',
+        		1155,
+				20,
 				NFTVoucher.tokenId,
 				NFTVoucher.price,
 				NFTVoucher.nftAmount,
 				NFTVoucher.startDate,
 				NFTVoucher.endDate,
-				'0',
+				0,
 				NFTVoucher.nftAddress,
 				true,
-				'0'
+				0
 			)
 
-			const itemDetails = await marketplace.marketItems('1')
+			const itemDetails = await marketplace.items('1')
 
 			expect(itemDetails.tokenId).to.equal(NFTVoucher.tokenId) // NFTVoucher.tokenId
-			expect(itemDetails.basePrice).to.equal(ethers.utils.parseEther('1'))
+			expect(itemDetails.startingPrice).to.equal(ethers.utils.parseEther('1'))
 			expect(itemDetails.itemsAvailable).to.equal(10) // NFTVoucher.nftAmount
 			expect(itemDetails.listingTime).to.equal(NFTVoucher.startDate)
 			expect(itemDetails.expirationTime).to.equal(NFTVoucher.endDate)
-			expect(itemDetails.reservePrice).to.equal(0)
-			expect(itemDetails.seller).to.equal(signer.address)
-			expect(itemDetails.lazyMint).to.equal(true)
-			expect(itemDetails.saleKind).to.equal(0)
+			expect(itemDetails.bookPrice).to.equal(0)
+			expect(itemDetails.seller).to.equal(Ichigo.address)
+			expect(itemDetails.lazy).to.equal(true)
+			expect(itemDetails.saleType).to.equal(0)
 		})
   });
 });

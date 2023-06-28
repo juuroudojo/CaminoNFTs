@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.8.20;
+pragma solidity 0.8.19;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 import "./interfaces/ILazyMint.sol";
 import "./interfaces/IRoyalty.sol";
@@ -53,7 +53,7 @@ contract Marketplace is AccessControl, IERC1155Receiver {
     }
 
     //itemId => Item
-    mapping(uint256 => Item) public marketItems;
+    mapping(uint256 => Item) public items;
     //itemId => Bid
     mapping(uint256 => Bid) public itemBids;
 
@@ -66,7 +66,7 @@ contract Marketplace is AccessControl, IERC1155Receiver {
 
     modifier itemExists(uint256 _id) {
         require(_id <= itemId.current(), "itemExists:Item Id out of bounds");
-        require(marketItems[_id].startingPrice > 0, "itemExists: Item not listed");
+        require(items[_id].startingPrice > 0, "itemExists: Item not listed");
         _;
     }
 
@@ -130,17 +130,18 @@ contract Marketplace is AccessControl, IERC1155Receiver {
         token = IERC20(token);
     }
 
-    // @dev Allows user to list items for sale
-    // @param _nftMaxCopies - Maximum number of copies of the NFT
-    // @param _tokenId - Token ID of the NFT
-    // @param _basePrice - Base price of the NFT
-    // @param _nftAmount - Number of NFTs to be listed
-    // @param _listingTime - Time when the listing starts
-    // @param _expirationTime - Time when the listing ends
-    // @param _bookPrice - Minimum price for the auction
-    // @param _nftAddress - Address of the NFT
-    // @param _lazyMint - Whether the NFT is lazyMint or not (for more info refer here: https://www.alchemy.com/overviews/lazy-minting)
-    // @param _saleType - Type of sale (FixedPrice or Auction)
+    /**  @dev Allows user to list items for sale
+    * @param _nftMaxCopies - Maximum number of copies of the NFT
+    * @param _tokenId - Token ID of the NFT
+    * @param _basePrice - Base price of the NFT
+    * @param _nftAmount - Number of NFTs to be listed
+    * @param _listingTime - Time when the listing starts
+    * @param _expirationTime - Time when the listing ends
+    * @param _bookPrice - Minimum price for the auction
+    * @param _nftAddress - Address of the NFT
+    * @param _lazyMint - Whether the NFT is lazyMint or not (for more info refer here: https://www.alchemy.com/overviews/lazy-minting)
+    * @param _saleType - Type of sale (FixedPrice or Auction)
+    */
     function listItem(
         uint256 _standard,
         uint256 _nftMaxCopies,
@@ -227,7 +228,7 @@ contract Marketplace is AccessControl, IERC1155Receiver {
             "listItem: NFT not approved for marketplace"
         );
 
-        marketItems[itemId] = Item(
+        items[itemId] = Item(
             standard,
             _tokenId,
             _basePrice,
@@ -266,7 +267,7 @@ contract Marketplace is AccessControl, IERC1155Receiver {
     // @dev Allows user to cancel the listing
     // @param _itemId - ID of the item to be cancelled
     function cancelListing(uint256 _itemId) external itemExists(_itemId) {
-        Item memory i = marketItems[_itemId];
+        Item memory i = items[_itemId];
         uint256 bid = itemBids[_itemId].maxBid;
         // requires the user to be the seller
         require(
@@ -289,7 +290,7 @@ contract Marketplace is AccessControl, IERC1155Receiver {
         bool islazyMint = i.lazy;
 
         // updates the record
-        delete (marketItems[_itemId]);
+        delete (items[_itemId]);
         delete (itemBids[_itemId]);
 
         if (islazyMint) {
@@ -308,36 +309,36 @@ contract Marketplace is AccessControl, IERC1155Receiver {
         external 
         itemExists(_itemId)
     {
-        Item memory i = marketItems[_itemId];
+        Item memory i = items[_itemId];
         uint256 _oldBid = itemBids[_itemId].maxBid;
 
         require(
             _msgSender() != i.seller,
-            "buyItem: seller itself cannot bid"
+            "buyItem: Can't bid on your own item!"
         );
 
         require(
             i.saleType == Type.Auction,
-            "makeBid: Not listed for Auction"
+            "makeBid: Not an auction!"
         );
         require(
             i.listingTime < block.timestamp,
-            "makeBid: Sale not started"
+            "makeBid: Auction not started!"
         );
         require(
             i.expirationTime > block.timestamp,
-            "makeBid: Sale expired"
+            "makeBid: Auction expired!"
         );
 
         if (_oldBid == 0) {
             require(
                 _bidAmount >= i.startingPrice,
-                "makeBid: Bid lower than base price"
+                "makeBid: Bid is too low!"
             );
         } else {
             require(
                 _bidAmount >= _oldBid + (_oldBid * bidMultiplier) / 10000,
-                "makeBid: Bid is not high enough"
+                "makeBid: Bid is too low!"
             );
             _refund(_oldBid, itemBids[_itemId].bidderAddress);
         }
@@ -366,7 +367,7 @@ contract Marketplace is AccessControl, IERC1155Receiver {
         ILazyMint.NFTVoucher calldata voucher,
         bytes memory signature
     ) public payable itemExists(_itemId) {
-        Item memory i = marketItems[_itemId];
+        Item memory i = items[_itemId];
         require(
             _msgSender() != i.seller,
             "buyItem: seller itself cannot buy"
@@ -415,21 +416,21 @@ contract Marketplace is AccessControl, IERC1155Receiver {
         ILazyMint.NFTVoucher calldata voucher,
         bytes memory signature
     ) external itemExists(_itemId) {
-        Item memory i = marketItems[_itemId];
+        Item memory i = items[_itemId];
         uint256 price = itemBids[_itemId].maxBid;
         uint256 _nftAmount = i.itemsAvailable;
 
         require(
             block.timestamp > i.expirationTime,
-            "claimNFT: Auction process ongoing"
+            "claimNFT: Auction still on!"
         );
         require(
             _msgSender() == itemBids[_itemId].bidderAddress,
-            "claimNFT: Unauthorized access"
+            "claimNFT: Access denied!"
         );
 
         if (price < i.bookPrice) {
-            revert("claimNFT: Reserve price not met");
+            revert("claimNFT: < book price");
         }
         if (i.lazy) {
             _purchaseWithLazyMinting(
@@ -454,14 +455,14 @@ contract Marketplace is AccessControl, IERC1155Receiver {
         ILazyMint.NFTVoucher calldata voucher,
         bytes memory signature
     ) external itemExists(_itemId) {
-        Item memory i = marketItems[_itemId];
+        Item memory i = items[_itemId];
         uint256 price = itemBids[_itemId].maxBid;
 
         require(
             _msgSender() == i.seller,
-            "acceptOffer: Unauthorized access"
+            "acceptOffer: Access denied!"
         );
-        require(price > 0, "acceptOffer: No offers to accept");
+        require(price > 0, "acceptOffer: Nothing to accept!");
 
         uint256 _nftAmount = i.itemsAvailable;
 
@@ -487,15 +488,15 @@ contract Marketplace is AccessControl, IERC1155Receiver {
     // @dev Allows seller to retract the offer made on the item, if specific requirements are met
     // @param _itemId - ID of the item to be claimed
     function retractOffer(uint256 _itemId) external itemExists(_itemId) {
-        Item memory i = marketItems[_itemId];
+        Item memory i = items[_itemId];
 
         require(
             _msgSender() == itemBids[_itemId].bidderAddress,
-            "retractOffer: Unauthorized access"
+            "retractOffer: Access denied!"
         );
         require(
             block.timestamp > i.expirationTime,
-            "retractOffer: Auction ongoing, cannot retract bid"
+            "retractOffer: Auction still on!"
         );
 
         uint256 amount = itemBids[_itemId].maxBid;
@@ -515,7 +516,7 @@ contract Marketplace is AccessControl, IERC1155Receiver {
 
     function withdrawRoyalty() external {
         uint256 amount = userRoyalties[_msgSender()];
-        require(amount != 0, "withdrawRoyalty: zero funds");
+        require(amount != 0, "withdrawRoyalty: Nothing to withdraw!");
         userRoyalties[_msgSender()] = 0;
         token.transfer(_msgSender(), amount);
     }
@@ -535,7 +536,7 @@ contract Marketplace is AccessControl, IERC1155Receiver {
         ILazyMint.NFTVoucher calldata voucher,
         bytes memory signature
     ) internal {
-        Item storage i = marketItems[_itemId];
+        Item storage i = items[_itemId];
         (
             address[] memory _creators,
             uint256[] memory _royalties,
@@ -570,7 +571,7 @@ contract Marketplace is AccessControl, IERC1155Receiver {
         token.safeTransfer(i.seller, payment);
 
         if (i.itemsAvailable == 0) {
-            delete (marketItems[_itemId]);
+            delete (items[_itemId]);
             delete (itemBids[_itemId]);
         }
     }
@@ -589,7 +590,7 @@ contract Marketplace is AccessControl, IERC1155Receiver {
     ) internal {
         uint256 serviceFee_ = _getServiceFee(_totalPrice);
         // Getting the info about royalties
-        Item storage i = marketItems[_itemId];
+        Item storage i = items[_itemId];
         (
             address[] memory _creators,
             uint256[] memory _royalties,
@@ -628,7 +629,7 @@ contract Marketplace is AccessControl, IERC1155Receiver {
         );
 
         if (i.itemsAvailable == 0) {
-            delete (marketItems[_itemId]);
+            delete (items[_itemId]);
             delete (itemBids[_itemId]);
         }
     }
@@ -642,7 +643,7 @@ contract Marketplace is AccessControl, IERC1155Receiver {
     {
         require(
             totalFee >= amount,
-            "withdrawServiceFee: Not sufficient funds"
+            "withdrawServiceFee: Insufficient funds!"
         );
         totalFee -= amount;
         token.safeTransfer(account, amount);
@@ -652,7 +653,7 @@ contract Marketplace is AccessControl, IERC1155Receiver {
     // @param _standard - Address of the standard to be added
     function addStandard(uint256 _standard) external onlyRole(DEFAULT_ADMIN_ROLE) {
         for(uint256 i = 0; i < supportedStandards.length; i++) {
-            require(supportedStandards[i] != _standard, "addStandard: Standard already supported");
+            require(supportedStandards[i] != _standard, "addStandard: Standard already supported!");
         }
         supportedStandards.push(_standard);
     }
@@ -666,7 +667,7 @@ contract Marketplace is AccessControl, IERC1155Receiver {
                 supportedStandards.pop();
                 break;
             } else {
-                revert("removeStandard: Standard not supported");
+                revert("removeStandard: Standard not supported!");
             }
         }
     }
