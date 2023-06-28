@@ -12,13 +12,13 @@
 
 ## Introduction
 
-`The repo consists of many templates each one exploring different topics and created with the purpose of walking the user through a particular branch of the blockchain ecosystem. As a result, the repo is quite big and can be overwhelming to navigate. Thus, the approach to deployment is chosen to balance out the coverage of all the aspects and creating a friendly user experience.`
+- The repo consists of many templates each one exploring different topics and created with the purpose of walking the user through a particular branch of the blockchain ecosystem. As a result, the repo is quite big and can be overwhelming to navigate. Thus, the approach to deployment is chosen to balance out the coverage of all the aspects and creating a friendly user experience.
 
 ## Deployment Structure
 
-For NFT & Token-gates access repo a tailored deployment format is chosen. We deploy 3 instances on NFT's: of 721, 1155, LazyMint, and a Marketplace providing the environment for interactions with these NFTs, supporting the functionalities underlining the specifics of each standard. Each NFT is permissionless for the sake of testing and can't be minted by anyone, although it is recommended to limit such interactions to maintain a realistic network state. (For the testing purposes). 
+- For NFT & Token-gates access repo a tailored deployment format is chosen. We deploy 3 instances on NFT's: of 721, 1155, LazyMint, and a Marketplace providing the environment for interactions with these NFTs, supporting the functionalities underlining the specifics of each standard. Each NFT is permissionless for the sake of testing and can't be minted by anyone, although it is recommended to limit such interactions to maintain a realistic network state. (For the testing purposes). 
 
-The rest of the repo is to be deployed on testnet, but the approach there is more heavily focused on permission management. The interacgions there require some roles. (You can contact us to obtain roles for additional testing opportunies). You can also learn a lot by simply going through the tests & rest of the repo.
+- The rest of the repo is to be deployed on testnet, but the approach there is more heavily focused on permission management. The interacgions there require some roles. (You can contact us to obtain roles for additional testing opportunies). You can also learn a lot by simply going through the tests & rest of the repo.
 
 ## Mainnet deployment
 
