@@ -1,4 +1,4 @@
-# Deployment Guide
+# Camino NFTs Deployment Guide <img src=https://github.com/juuroudojo/juuroudojo/blob/main/images/image01.gif height = "90" />
 
 ## Table of Contents
 
@@ -12,7 +12,7 @@
 
 ## Introduction
 
-The repo consists of many templates each one exploring different topics and created with the purpose of walking the user through a particular branch of the blockchain ecosystem. As a result, the repo is quite big and can be overwhelming to navigate. Thus, the approach to deployment is chosen to balance out the coverage of all the aspects and creating a friendly user experience.
+`The repo consists of many templates each one exploring different topics and created with the purpose of walking the user through a particular branch of the blockchain ecosystem. As a result, the repo is quite big and can be overwhelming to navigate. Thus, the approach to deployment is chosen to balance out the coverage of all the aspects and creating a friendly user experience.`
 
 ## Deployment Structure
 
@@ -22,10 +22,10 @@ The rest of the repo is to be deployed on testnet, but the approach there is mor
 
 ## Mainnet deployment
 
-- [Marketplace.sol](r) - deployed on Columbus-4
-- [NFT721.sol](d) - deployed on Columbus-4
-- [NFT1155.sol](d) - deployed on Columbus-4
-- [LazyMintNFT.sol](pu) - deployed on Columbus-4
+- [Marketplace.sol](r) - deployed on Columbus
+- [NFT721.sol](d) - deployed on Columbus
+- [NFT1155.sol](d) - deployed on Columbus
+- [LazyMintNFT.sol](pu) - deployed on Columbus
 
 ## Smart Contracts
 
@@ -53,6 +53,10 @@ The rest of the repo is to be deployed on testnet, but the approach there is mor
 - **`NFT988.sol`** - Basic implementation of a ERC988.
 
 - **`LazyMintNFT.sol`** - A contract describing and providing support for LazyMint functionality.
+
+## Other Educational Materials
+
+Contracts in this repo are built as blocks, so that one can explore and play around by combining and/or adapting existing contracts to ones vision. The repo is also accompanied by a set of tests, which can be used as a reference for the expected behaviour of the contracts.
 
 
 ## Additional Info
