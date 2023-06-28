@@ -4,7 +4,7 @@
 
 <br/>
 
-# Camino NFTs
+# Camino NFTs 
 
 ## [DEPLOYMENT GUIDE](https://github.com/juuroudojo/CaminoNFTs/blob/master/DEPLOYMENT.md)
 
@@ -72,7 +72,7 @@ To run and interact with these projects, you will need:
 - [Node.js](https://nodejs.org/en/download/) (version 14.x or higher)
 - [npm](https://www.npmjs.com/get-npm) (usually bundled with Node.js)
 - [Hardhat](https://hardhat.org/getting-started/#overview) development environment
-- [Camino Wallet](https://wallet.camino.foundation/) (Should be KYC verified)
+- [Camino Wallet](https://wallet.camino.foundation/) (Must be KYC verified)
 
 ## Project Structure
 
