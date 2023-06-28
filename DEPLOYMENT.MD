@@ -29,6 +29,8 @@ The rest of the repo is to be deployed on testnet, but the approach there is mor
 
 ## Smart Contracts
 
+<img src=https://github.com/juuroudojo/images/blob/main/Untitled%20Diagram.drawio.png/>
+
 - **`Marketplace.sol`** - Basic implementation of a Liquidity Pool solution omitting complex mathematical algorithms providing AMM mechanisms. User is introduced to the concept of a liquidity pool, liquidity pool tokens, exchange mechanisms, tokenomics basics, etc.
 
 - **`NFT721.sol`** - Basic implementation of a Staking platform. Allows anyone to participate in a staking 
